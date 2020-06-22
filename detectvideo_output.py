@@ -34,8 +34,14 @@ def main(_argv):
 
     print("Video from: ", video_path )
     vid = cv2.VideoCapture(video_path)
-    fps = 10.0
-    output_movie = cv2.VideoWriter( "output.avi", cv2.VideoWriter_fourcc(*"MJPG"), fps, (input_size, input_size))
+
+    height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
+    fps = int(vid.get(cv2.CAP_PROP_FPS))
+
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    output_movie = cv2.VideoWriter('the_output.avi', fourcc, fps, (width, height))
+
 
     if FLAGS.framework == 'tf':
         input_layer = tf.keras.layers.Input([input_size, input_size, 3])
