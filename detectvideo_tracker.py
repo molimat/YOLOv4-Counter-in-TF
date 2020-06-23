@@ -42,7 +42,7 @@ def main(_argv):
     fps = int(vid.get(cv2.CAP_PROP_FPS))
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    output_movie = cv2.VideoWriter('the_output.avi', fourcc, fps, (width, height))
+    output_movie = cv2.VideoWriter('output' + time.gmtime()+ '.avi', fourcc, fps, (width, height))
 
     # initialize our centroid tracker
     ct = CentroidTracker()
