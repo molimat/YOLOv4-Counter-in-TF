@@ -137,12 +137,35 @@ def main(_argv):
 
 
         if counter == 1:
-                  cv2.line(input_frame, (roi, 0), (roi, height), (0, 0xFF, 0), 5)
-                else:
-                  cv2.line(input_frame, (roi, 0), (roi, height), (0, 0, 0xFF), 5)
+            cv2.line(frame, (roi, 0), (roi, height), (0, 0xFF, 0), 5)
+        else:
+            cv2.line(frame, (roi, 0), (roi, height), (0, 0, 0xFF), 5)
 
-                total_passed_vehicle = total_passed_vehicle + counter
+        total_passed_vehicle = total_passed_vehicle + counter
 
+        # insert information text to video frame
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        cv2.putText(
+            input_frame,
+            'Veiculos Detectados: ' + str(total_passed_vehicle),
+            (10, 35),
+            font,
+            0.8,
+            (0, 0xFF, 0xFF),
+            2,
+            cv2.FONT_HERSHEY_SIMPLEX,
+            )               
+        
+        cv2.putText(
+            input_frame,
+            'Linha de ROI',
+            (545, roi-10),
+            font,
+            0.6,
+            (0, 0, 0xFF),
+            2,
+            cv2.LINE_AA,
+            )
         # image = utils.draw_bbox(frame, bboxes)
         # curr_time = time.time()
         # exec_time = curr_time - prev_time
