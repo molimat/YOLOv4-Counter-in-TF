@@ -88,6 +88,11 @@ def main(_argv):
 
     while True:
         return_value, frame = vid.read()
+
+        if not  return_value: #verify if the last frame was empty
+                    print("end of the video file...")
+                    break
+
         if return_value:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             image = Image.fromarray(frame)
