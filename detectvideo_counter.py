@@ -131,7 +131,7 @@ def main(_argv):
                                                                                                             np.squeeze(classes).astype(np.int32),
                                                                                                             np.squeeze(scores),
                                                                                                             category_index,
-                                                                                                            x_reference = roi,
+                                                                                                            y_reference = roi,
                                                                                                             use_normalized_coordinates=True,
                                                                                                             line_thickness=4)
 
