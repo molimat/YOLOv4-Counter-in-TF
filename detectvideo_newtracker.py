@@ -135,7 +135,7 @@ def main(_argv):
         bboxes = utils.nms(bboxes, 0.213, method='nms')
         #bboxes: (xmin, ymin, xmax, ymax, score, class)
         np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-        dets = np.asarray(bboxes[2, :5]) #0 - person, 2 - cars
+        dets = np.asarray(bboxes[:5]) #0 - person, 2 - cars
         tracks = tracker.update(dets)
 
         boxes = []
