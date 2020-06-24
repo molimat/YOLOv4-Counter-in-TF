@@ -56,7 +56,7 @@ def main(_argv):
     # initialize our tracker
     tracker = Sort()
     memory = {}
-    line = [(550, 655), (843, 543)]
+    line = [(550, 655), (920, 523)]
     counter = 0
 
     if FLAGS.framework == 'tf':
@@ -132,10 +132,10 @@ def main(_argv):
             pred_bbox = utils.postprocess_bbbox(pred_bbox, ANCHORS, STRIDES)
 
         bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.25)
-        bboxes = utils.nms(bboxes, 0.213, method='nms')
+        #bboxes = utils.nms(bboxes, 0.213, method='nms')
         #bboxes: (xmin, ymin, xmax, ymax, score, class)
         np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-        dets = np.asarray(bboxes[:5]) #0 - person, 2 - cars
+        dets = np.asarray(bboxes[:, :5]) #0 - person, 2 - cars
         tracks = tracker.update(dets)
 
         boxes = []
