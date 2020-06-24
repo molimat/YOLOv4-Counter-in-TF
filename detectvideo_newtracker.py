@@ -138,8 +138,8 @@ def main(_argv):
         dets = []
         if len(bboxes) > 0:
             # loop over the indexes we are keeping
-            for i in bboxes:
-                (xmin, ymin, xmax, ymax, prob) = (bboxes[i][0], bboxes[i][1], bboxes[i][2], bboxes[i][3], bboxes[i][4])
+            for i, bbox in enumerate(bboxes):
+                (xmin, ymin, xmax, ymax, prob) = (bbox[i][0], bbox[i][1], bbox[i][2], bbox[i][3], bbox[i][4])
                 dets.append([xmin, ymin, xmax, ymax, prob])
         
         np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
