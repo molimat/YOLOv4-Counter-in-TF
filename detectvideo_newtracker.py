@@ -131,11 +131,19 @@ def main(_argv):
         else:
             pred_bbox = utils.postprocess_bbbox(pred_bbox, ANCHORS, STRIDES)
 
-        bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.25)
-        #bboxes = utils.nms(bboxes, 0.213, method='nms')
-        #bboxes: (xmin, ymin, xmax, ymax, score, class)
+        bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.35)
+        bboxes = utils.nms(bboxes, 0.213, method='nms')
+
+        #bboxes: [x_min, y_min, x_max, y_max, probability, cls_id] format coordinates.
+        dets = []
+        if len(bboxes) > 0:
+            # loop over the indexes we are keeping
+            for i in bboxes:
+                (xmin, ymin, xmax, ymax, prob) = (bboxes[i][0], bboxes[i][1], bboxes[i][2], bboxes[i][3], bboxes[i][4])
+                dets.append([xmin, ymin, xmax, ymax, prob])
+        
         np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-        dets = np.asarray(bboxes[:, :5]) #0 - person, 2 - cars
+        dets = np.asarray(dets) #0 - person, 2 - cars
         tracks = tracker.update(dets)
 
         boxes = []
