@@ -48,6 +48,7 @@ def main(_argv):
     height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
     width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
     fps = int(vid.get(cv2.CAP_PROP_FPS))
+    frame_number = 0
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     output_movie = cv2.VideoWriter('output' + str(round(time.time()))+ '.avi', fourcc, fps, (width, height))
@@ -197,7 +198,8 @@ def main(_argv):
         # # cv2.imshow("result", result)
 
         output_movie.write(frame)
-        print ("writing frame")
+        frame_number += 1
+        print ("writing frame " + str(frame_number))
 
         if cv2.waitKey(1) & 0xFF == ord('q'): break
     vid.release()   
