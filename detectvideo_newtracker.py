@@ -204,7 +204,7 @@ def main(_argv):
         # # cv2.namedWindow("result", cv2.WINDOW_AUTOSIZE)
         # result = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         # # cv2.imshow("result", result)
-        imShow("result", frame) #COMMENT THIS LINE IF NOTUSING COLAB
+        
         output_movie.write(frame)
         frame_number += 1
         print ("writing frame " + str(frame_number))
