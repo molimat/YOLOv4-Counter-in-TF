@@ -125,8 +125,8 @@ def main(_argv):
         bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.40)
         bboxes = utils.nms(bboxes, 0.213, method='nms')
         #bboxes: (xmin, ymin, xmax, ymax, score, class)
-      	#np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-        dets = np.asarray(bboxes[:, :5])
+        np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
+        dets = np.asarray(bboxes[:5])
         tracks = tracker.update(dets)
 
         boxes = []
