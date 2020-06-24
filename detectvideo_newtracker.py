@@ -18,6 +18,7 @@ flags.DEFINE_boolean('tiny', False, 'yolo or yolo-tiny')
 flags.DEFINE_string('model', 'yolov4', 'yolov3 or yolov4')
 flags.DEFINE_string('video', './data/road.avi', 'path to input video')
 
+
 def main(_argv):
     if FLAGS.tiny:
         STRIDES = np.array(cfg.YOLO.STRIDES_TINY)
@@ -33,6 +34,8 @@ def main(_argv):
     input_size = FLAGS.size
     video_path = FLAGS.video
 
+    np.random.seed(42)
+    COLORS = np.random.randint(0, 255, size=(200, 3),dtype="uint8")
 
     print("Video from: ", video_path )
     vid = cv2.VideoCapture(video_path)
@@ -200,3 +203,9 @@ if __name__ == '__main__':
         app.run(main)
     except SystemExit:
         pass
+
+def intersect(A,B,C,D):
+	return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
+
+def ccw(A,B,C):
+	return (C[1]-A[1]) * (B[0]-A[0]) > (B[1]-A[1]) * (C[0]-A[0])
