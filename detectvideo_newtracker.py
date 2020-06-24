@@ -23,7 +23,7 @@ def intersect(A,B,C,D):
 
 def ccw(A,B,C):
 	return (C[1]-A[1]) * (B[0]-A[0]) > (B[1]-A[1]) * (C[0]-A[0])
-    
+
 def main(_argv):
     if FLAGS.tiny:
         STRIDES = np.array(cfg.YOLO.STRIDES_TINY)
@@ -55,7 +55,7 @@ def main(_argv):
     # initialize our tracker
     tracker = Sort()
     memory = {}
-    line = [(43, 543), (550, 655)]
+    line = [(550, 655), (843, 543)]
     counter = 0
 
     if FLAGS.framework == 'tf':
@@ -130,11 +130,11 @@ def main(_argv):
         else:
             pred_bbox = utils.postprocess_bbbox(pred_bbox, ANCHORS, STRIDES)
 
-        bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.40)
+        bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.25)
         bboxes = utils.nms(bboxes, 0.213, method='nms')
         #bboxes: (xmin, ymin, xmax, ymax, score, class)
         np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-        dets = np.asarray(bboxes[:5])
+        dets = np.asarray(bboxes[2, :5]) #0 - person, 2 - cars
         tracks = tracker.update(dets)
 
         boxes = []
