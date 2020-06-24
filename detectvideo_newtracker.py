@@ -56,7 +56,11 @@ def main(_argv):
     # initialize our tracker
     tracker = Sort()
     memory = {}
-    line = [(0, int(round(height*0.8))), (width, int(round(height*0.8)))]
+
+
+    #ROI
+    # line = [(0, int(round(height*0.8))), (width, int(round(height*0.8)))]
+    line = [(550, 655), (920, 523)]
     counter = 0
 
     if FLAGS.framework == 'tf':
