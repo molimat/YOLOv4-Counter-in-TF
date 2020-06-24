@@ -120,11 +120,11 @@ def main(_argv):
             pred_bbox = utils.postprocess_bbbox(pred_bbox, ANCHORS, STRIDES)
 
         bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.40)
+        bboxes = utils.nms(bboxes, 0.213, method='nms')
 
         #coord list of all boxes detected in this frame
         rects = bboxes[:, 0:4] 
 
-        #bboxes = utils.nms(bboxes, 0.213, method='nms')
         # box rectangles
         objects = ct.update(rects)
         # loop over the tracked objects

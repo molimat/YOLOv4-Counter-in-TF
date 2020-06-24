@@ -5,7 +5,7 @@ import core.utils as utils
 from core.yolov4 import YOLOv4, YOLOv3, YOLOv3_tiny, decode
 from PIL import Image
 from core.config import cfg
-from core import visualization_utils as vis_util
+from core.sort import *
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -33,14 +33,23 @@ def main(_argv):
     input_size = FLAGS.size
     video_path = FLAGS.video
 
+
     print("Video from: ", video_path )
     vid = cv2.VideoCapture(video_path)
+
     height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
     width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
     fps = int(vid.get(cv2.CAP_PROP_FPS))
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     output_movie = cv2.VideoWriter('output' + str(round(time.time()))+ '.avi', fourcc, fps, (width, height))
+
+    # initialize our tracker
+    tracker = Sort()
+    memory = {}
+    line = [(43, 543), (550, 655)]
+    counter = 0
+
     if FLAGS.framework == 'tf':
         input_layer = tf.keras.layers.Input([input_size, input_size, 3])
         if FLAGS.tiny:
@@ -84,16 +93,13 @@ def main(_argv):
         print(input_details)
         print(output_details)
 
-    total_passed_vehicle = 0
-    speed = "waiting..."
-    direction = "waiting..."
-    size = "waiting..."
-    color = "waiting..."
-    counting_mode = "..."
-    width_heigh_taken = True
-
     while True:
         return_value, frame = vid.read()
+
+        if not  return_value: #verify if the last frame was empty
+                    print("end of the video file...")
+                    break
+
         if return_value:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             image = Image.fromarray(frame)
@@ -116,66 +122,74 @@ def main(_argv):
         else:
             pred_bbox = utils.postprocess_bbbox(pred_bbox, ANCHORS, STRIDES)
 
-        bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.25)
-        boxes = bboxes[:, 0:4]
-        scores = bboxes[:, 4]
-        classes = bboxes[:, 5]
-        #bboxes = utils.nms(bboxes, 0.213, method='nms')
-        roi = 450
-        category_index = utils.read_class_names(cfg.YOLO.CLASSES)
-        counter, csv_line, counting_mode = vis_util.visualize_boxes_and_labels_on_image_array_y_axis(vid.get(1),
-                                                                                                            frame,
-                                                                                                            1,
-                                                                                                            False,
-                                                                                                            np.squeeze(boxes),
-                                                                                                            np.squeeze(classes).astype(np.int32),
-                                                                                                            np.squeeze(scores),
-                                                                                                            category_index,
-                                                                                                            y_reference = roi,
-                                                                                                            use_normalized_coordinates=True,
-                                                                                                            line_thickness=4)
+        bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.40)
+        bboxes = utils.nms(bboxes, 0.213, method='nms')
+
+        #bboxes: (xmin, ymin, xmax, ymax, score, class)
+
+      	np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
+        dets = np.asarray(bboxes[:, :5]) #drop class?
+        tracks = tracker.update(dets)
+
+        boxes = []
+        indexIDs = []
+        c = []
+        previous = memory.copy()
+        memory = {}
+
+        for track in tracks:
+            boxes.append([track[0], track[1], track[2], track[3]])
+            indexIDs.append(int(track[4]))
+            memory[indexIDs[-1]] = boxes[-1]
+
+        if len(boxes) > 0:
+            i = int(0)
+            for box in boxes:
+                # extract the bounding box coordinates
+                (x, y) = (int(box[0]), int(box[1]))
+                (w, h) = (int(box[2]), int(box[3]))
+
+                # draw a bounding box rectangle and label on the image
+                # color = [int(c) for c in COLORS[classIDs[i]]]
+                # cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
+
+                color = [int(c) for c in COLORS[indexIDs[i] % len(COLORS)]]
+                cv2.rectangle(frame, (x, y), (w, h), color, 2)
+
+                if indexIDs[i] in previous:
+                    previous_box = previous[indexIDs[i]]
+                    (x2, y2) = (int(previous_box[0]), int(previous_box[1]))
+                    (w2, h2) = (int(previous_box[2]), int(previous_box[3]))
+                    p0 = (int(x + (w-x)/2), int(y + (h-y)/2))
+                    p1 = (int(x2 + (w2-x2)/2), int(y2 + (h2-y2)/2))
+                    cv2.line(frame, p0, p1, color, 3)
+
+                    if intersect(p0, p1, line[0], line[1]):
+                        counter += 1
+
+                # text = "{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
+                text = "{}".format(indexIDs[i])
+                cv2.putText(frame, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+                i += 1
+
+        # draw line
+        cv2.line(frame, line[0], line[1], (0, 255, 255), 5)
+
+        # draw counter
+        cv2.putText(frame, str(counter), (100,200), cv2.FONT_HERSHEY_DUPLEX, 5.0, (0, 255, 255), 10)
+        # counter += 1
 
 
-        if counter == 1:
-            cv2.line(frame, (roi, 0), (roi, height), (0, 0xFF, 0), 5)
-        else:
-            cv2.line(frame, (roi, 0), (roi, height), (0, 0, 0xFF), 5)
-
-        total_passed_vehicle = total_passed_vehicle + counter
-
-        # insert information text to video frame
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(
-            input_frame,
-            'Veiculos Detectados: ' + str(total_passed_vehicle),
-            (10, 35),
-            font,
-            0.8,
-            (0, 0xFF, 0xFF),
-            2,
-            cv2.FONT_HERSHEY_SIMPLEX,
-            )               
-        
-        cv2.putText(
-            input_frame,
-            'Linha de ROI',
-            (545, roi-10),
-            font,
-            0.6,
-            (0, 0, 0xFF),
-            2,
-            cv2.LINE_AA,
-            )
         # image = utils.draw_bbox(frame, bboxes)
         # curr_time = time.time()
         # exec_time = curr_time - prev_time
         # result = np.asarray(image)
         # info = "time: %.2f ms" %(1000*exec_time)
         # print(info)
-        # cv2.namedWindow("result", cv2.WINDOW_AUTOSIZE)
+        # # cv2.namedWindow("result", cv2.WINDOW_AUTOSIZE)
         # result = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-        # cv2.imshow("result", result)
-        # if cv2.waitKey(1) & 0xFF == ord('q'): break
+        # # cv2.imshow("result", result)
+
         output_movie.write(frame)
         print ("writing frame")
 
@@ -183,7 +197,6 @@ def main(_argv):
     vid.release()   
     output_movie.release()
     cv2.destroyAllWindows()
-
 if __name__ == '__main__':
     try:
         app.run(main)
