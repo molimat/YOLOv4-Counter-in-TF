@@ -22,6 +22,12 @@ python detect.py --weights ./data/yolov4.weights --framework tf --size 608 --ima
 
 # yolov4 tflite
 python detect.py --weights ./data/yolov4-int8.tflite --framework tflite --size 416 --image ./data/kite.jpg
+
+# yolov4 video - with file output
+python detectvideo_output.py --weights ./data/yolov4.weights --framework tf --size 608 --video ./path_to_video_file
+
+# yolov4 tracker - with file output
+python detectvideo_newtracker.py --weights ./data/yolov4.weights --framework tf --size 608 --video ./path_to_video_file
 ```
 
 #### Output
