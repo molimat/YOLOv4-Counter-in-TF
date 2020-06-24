@@ -56,7 +56,7 @@ def main(_argv):
     # initialize our tracker
     tracker = Sort()
     memory = {}
-    line = [(0, 500), (width, 500)]
+    line = [(0, height*0.8), (width, height*0.8)]
     counter = 0
 
     if FLAGS.framework == 'tf':
@@ -105,7 +105,7 @@ def main(_argv):
     while True:
         return_value, frame = vid.read()
 
-        if not  return_value or frame_number > 500: #verify if the last frame was empty
+        if not  return_value or frame_number > 1000: #verify if the last frame was empty
                     print("end of the video file...")
                     break
 
