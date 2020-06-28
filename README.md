@@ -7,13 +7,18 @@ Convert YOLO v4, YOLOv3, YOLO tiny .weights to .pb, .tflite and trt format for t
 Download yolov4.weights file: https://drive.google.com/open?id=1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT
 
 
-### Prerequisites
-* Tensorflow 2.1.0
-* tensorflow_addons 0.9.1 (required for mish activation)
-
 ### Disclaimer
 This github is still in working. Not so much have been done yet, 
 The purpose is to create a vehicle and people counter and make it appliable for deploy.
+
+
+### Prerequisites
+```bash
+pip install -r requirements.txt
+pip install -r requirements-gpu.txt
+```
+But instead of doing it on your own computer, every step on this repository will be placed in a google-colab notebook. 
+
 
 ### Demo
 
