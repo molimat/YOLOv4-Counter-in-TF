@@ -1,10 +1,11 @@
-# tensorflow-yolov4-tflite
+# YOLOv4-Counter-in-TF
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-YOLOv4 Implemented in Tensorflow 2.0. 
-Convert YOLO v4, YOLOv3, YOLO tiny .weights to .pb, .tflite and trt format for tensorflow, tensorflow lite, tensorRT.
+YOLOv4 implementation for a counter program, using tensorflow.
+In future trying to make it faster and lighter to deploy to low hardware systems
 
-Download yolov4.weights file: https://drive.google.com/open?id=1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT
+
+COCO data set, 80 Classes yolov4.weights file: https://drive.google.com/open?id=1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT
 
 
 ### Disclaimer
