@@ -31,9 +31,10 @@ python detectvideo_output.py --weights ./data/yolov4.weights --framework tf --si
 python detectvideo_counter.py --weights ./data/yolov4.weights --framework tf --size 608 --video ./path_to_video_file
 ```
 
-#### Output
+#### Outputs
 
 ![Alt Text](result1.gif)
+
 ![Alt Text](result2.gif)
 
 
@@ -79,9 +80,10 @@ python convert_trt.py --weights ./checkpoints/yolov4.tf --quantize_mode float16 
 
 ### References
 
-  * YOLOv4: Optimal Speed and Accuracy of Object Detection [YOLOv4](https://arxiv.org/abs/2004.10934).
-  * [darknet](https://github.com/AlexeyAB/darknet)
+  This project is totally based on the following implementations and Ideas
+  They are amazing!
   
-   My project is inspired by these previous fantastic YOLOv3 implementations:
-  * [Yolov3 tensorflow](https://github.com/YunYang1994/tensorflow-yolov3)
-  * [Yolov3 tf2](https://github.com/zzh8829/yolov3-tf2)
+  * [darknet](https://github.com/AlexeyAB/darknet)
+  * [hunglc007-tfyolov4lite]https://github.com/hunglc007/tensorflow-yolov4-tflite
+  * [TheAIGuy](https://github.com/theAIGuysCode)
+  * [Object counter in Yolo](https://github.com/tugot17/YOLO-Object-Counting-API)
