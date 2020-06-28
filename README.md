@@ -11,8 +11,9 @@ Download yolov4.weights file: https://drive.google.com/open?id=1cewMfusmPjYWbrnu
 * Tensorflow 2.1.0
 * tensorflow_addons 0.9.1 (required for mish activation)
 
-### Performance
-<p align="center"><img src="data/performance.png" width="640"\></p>
+### Disclaimer
+This github is still in working. Not so much have been done yet, 
+The purpose is to create a vehicle and people counter and make it appliable for deploy.
 
 ### Demo
 
@@ -26,17 +27,27 @@ python detect.py --weights ./data/yolov4-int8.tflite --framework tflite --size 4
 # yolov4 video - with file output
 python detectvideo_output.py --weights ./data/yolov4.weights --framework tf --size 608 --video ./path_to_video_file
 
-# yolov4 tracker - with file output
-python detectvideo_newtracker.py --weights ./data/yolov4.weights --framework tf --size 608 --video ./path_to_video_file
+# yolov4 counter - need to change the line position within the file.
+python detectvideo_counter.py --weights ./data/yolov4.weights --framework tf --size 608 --video ./path_to_video_file
 ```
 
 #### Output
 
-##### Yolov4 original weight
-<p align="center"><img src="result.png" width="640"\></p>
+![Alt Text](result1.gif)
+![Alt Text](result2.gif)
 
-##### Yolov4 tflite int8
-<p align="center"><img src="result-int8.png" width="640"\></p>
+
+### Obtain a dataset for a custom or class focused train
+Some times, if you want to increase your detection speed or add some class to your detection, you should
+retrain your network. 
+I prepared a colab-notebook with dataset download to acquire OpenImages with proper labels for darknet.
+[Colab Notebook for Dataset Download](https://colab.research.google.com/drive/1SUtyP_YyYrMPtcTIFJpduZyjwEQ5nBVJ?usp=sharing)
+
+
+### Traning your own model
+
+The training performance is not fully reproduced yet, so I recommended to use Alex's [Darknet](https://github.com/AlexeyAB/darknet) to train your own data, then convert the .weights to tensorflow or tflite.
+
 
 ### Convert to tflite
 
@@ -65,104 +76,6 @@ python save_model.py --weights ./data/yolov4.weights --output ./checkpoints/yolo
 python convert_trt.py --weights ./checkpoints/yolov4.tf --quantize_mode float16 --output ./checkpoints/yolov4-trt-fp16-416
 ```
 
-### Evaluate on COCO 2017 Dataset
-```bash
-# run script in /script/get_coco_dataset_2017.sh to download COCO 2017 Dataset
-# preprocess coco dataset
-cd data
-mkdir dataset
-cd ..
-cd scripts
-python coco_convert.py --input ./coco/annotations/instances_val2017.json --output val2017.pkl
-python coco_annotation.py --coco_path ./coco 
-cd ..
-
-# evaluate yolov4 model
-python evaluate.py --weights ./data/yolov4.weights
-cd mAP/extra
-python remove_space.py
-cd ..
-python main.py --output results_yolov4_tf
-```
-#### mAP50 on COCO 2017 Dataset
-
-| Detection   | 512x512 | 416x416 | 320x320 |
-|-------------|---------|---------|---------|
-| YoloV3      | 55.43   | 52.32   |         |
-| YoloV4      | 61.96   | 57.33   |         |
-
-### Benchmark
-```bash
-python benchmarks.py --size 416 --model yolov4 --weights ./data/yolov4.weights
-```
-#### TensorRT performance
- 
-| YoloV4 416 images/s |   FP32   |   FP16   |   INT8   |
-|---------------------|----------|----------|----------|
-| Batch size 1        | 55       | 116      |          |
-| Batch size 8        | 70       | 152      |          |
-
-#### Tesla P100
-
-| Detection   | 512x512 | 416x416 | 320x320 |
-|-------------|---------|---------|---------|
-| YoloV3 FPS  | 40.6    | 49.4    | 61.3    |
-| YoloV4 FPS  | 33.4    | 41.7    | 50.0    |
-
-#### Tesla K80
-
-| Detection   | 512x512 | 416x416 | 320x320 |
-|-------------|---------|---------|---------|
-| YoloV3 FPS  | 10.8    | 12.9    | 17.6    |
-| YoloV4 FPS  | 9.6     | 11.7    | 16.0    |
-
-#### Tesla T4
-
-| Detection   | 512x512 | 416x416 | 320x320 |
-|-------------|---------|---------|---------|
-| YoloV3 FPS  | 27.6    | 32.3    | 45.1    |
-| YoloV4 FPS  | 24.0    | 30.3    | 40.1    |
-
-#### Tesla P4
-
-| Detection   | 512x512 | 416x416 | 320x320 |
-|-------------|---------|---------|---------|
-| YoloV3 FPS  | 20.2    | 24.2    | 31.2    |
-| YoloV4 FPS  | 16.2    | 20.2    | 26.5    |
-
-#### Macbook Pro 15 (2.3GHz i7)
-
-| Detection   | 512x512 | 416x416 | 320x320 |
-|-------------|---------|---------|---------|
-| YoloV3 FPS  |         |         |         |
-| YoloV4 FPS  |         |         |         |
-
-### Traning your own model
-```bash
-# Prepare your dataset
-# If you want to train from scratch:
-In config.py set FISRT_STAGE_EPOCHS=0 
-# Run script:
-python train.py
-
-# Transfer learning: 
-python train.py --weights ./data/yolov4.weights
-```
-The training performance is not fully reproduced yet, so I recommended to use Alex's [Darknet](https://github.com/AlexeyAB/darknet) to train your own data, then convert the .weights to tensorflow or tflite.
-
-
-
-### TODO
-* [x] Convert YOLOv4 to TensorRT
-* [x] YOLOv4 tflite on android
-* [ ] YOLOv4 tflite on ios
-* [x] Training code
-* [x] Update scale xy
-* [ ] ciou
-* [ ] Mosaic data augmentation
-* [x] Mish activation
-* [x] yolov4 tflite version
-* [x] yolov4 in8 tflite version for mobile
 
 ### References
 
