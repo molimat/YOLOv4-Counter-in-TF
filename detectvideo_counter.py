@@ -135,7 +135,7 @@ def main(_argv):
         else:
             pred_bbox = utils.postprocess_bbbox(pred_bbox, ANCHORS, STRIDES)
 
-        bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.35)
+        bboxes = utils.postprocess_boxes(pred_bbox, frame_size, input_size, 0.25)
         bboxes = utils.nms(bboxes, 0.213, method='nms')
 
         #bboxes: [x_min, y_min, x_max, y_max, probability, cls_id] format coordinates.

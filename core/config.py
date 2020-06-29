@@ -12,7 +12,7 @@ cfg                           = __C
 __C.YOLO                      = edict()
 
 # Set the class name
-__C.YOLO.CLASSES              = "./data/classes/custom.names"
+__C.YOLO.CLASSES              = "./data/classes/coco.names"
 __C.YOLO.ANCHORS              = "./data/anchors/yolov4_anchors.txt"
 __C.YOLO.ANCHORS_V3           = "./data/anchors/yolov3_anchors.txt"
 __C.YOLO.ANCHORS_TINY         = "./data/anchors/basline_tiny_anchors.txt"
