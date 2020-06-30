@@ -25,7 +25,7 @@ But instead of doing it on your own computer, every step on this repository will
 
 ```bash
 # yolov4
-python detect.py --weights ./data/yolov4.weights --framework tf --size 608 --image ./data/kite.jpg
+python detect.py --weights ./data/yolov4.weights --framework tf --size 608 --image ./data/madureira.jpg --output result1.png
 
 # yolov4 tflite
 python detect.py --weights ./data/yolov4-int8.tflite --framework tflite --size 416 --image ./data/kite.jpg

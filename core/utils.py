@@ -3,6 +3,7 @@ import random
 import colorsys
 import numpy as np
 import tensorflow as tf
+import argparse
 from core.config import cfg
 
 def load_weights_tiny(model, weights_file):

@@ -1,1 +1,5 @@
 data/*.weights
+core/__pycache__/
+.vscode/settings.json
+road.mp4
+*.avi

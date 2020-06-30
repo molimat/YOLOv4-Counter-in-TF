@@ -2,6 +2,7 @@ import time
 from absl import app, flags, logging
 from absl.flags import FLAGS
 import core.utils as utils
+import core.roi as roi
 from core.yolov4 import YOLOv4, YOLOv3, YOLOv3_tiny, decode
 from PIL import Image
 from core.config import cfg
@@ -49,9 +50,15 @@ def main(_argv):
     width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
     fps = int(vid.get(cv2.CAP_PROP_FPS))
     frame_number = 0
+    frame_count = vid.get(7)
+    vid.set(1, frame_count/2)
+    _, frame_to_roi = vid.read() #frame to be sent to roi, a random.
+    frame_to_roi = Image.fromarray(frame_to_roi)
+    vid.set(1, 1) # back to begin
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     output_movie = cv2.VideoWriter('output' + str(round(time.time()))+ '.avi', fourcc, fps, (width, height))
+
 
     # initialize our tracker
     tracker = Sort()
@@ -60,7 +67,8 @@ def main(_argv):
 
     #ROI
     # line = [(0, int(round(height*0.8))), (width, int(round(height*0.8)))]
-    line = [(550, 655), (920, 523)]
+    roi_line = roi.get_ROI_line(frame_to_roi)
+    line = [roi_line[0], roi_line[1]]
     counter = 0
 
     if FLAGS.framework == 'tf':
@@ -147,7 +155,7 @@ def main(_argv):
                 dets.append([xmin, ymin, xmax, ymax, prob])
         
         np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-        dets = np.asarray(dets) #0 - person, 2 - cars
+        dets = np.asarray(dets) 
         tracks = tracker.update(dets)
 
         boxes = []

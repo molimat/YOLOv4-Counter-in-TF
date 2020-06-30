@@ -40,9 +40,15 @@ def main(_argv):
     height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
     width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
     fps = int(vid.get(cv2.CAP_PROP_FPS))
+ 
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     output_movie = cv2.VideoWriter('output' + str(round(time.time()))+ '.avi', fourcc, fps, (width, height))
+
+
+
+
+    
 
     # initialize our centroid tracker
     ct = CentroidTracker()
