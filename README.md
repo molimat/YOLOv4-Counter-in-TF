@@ -33,8 +33,11 @@ python detect.py --weights ./data/yolov4-int8.tflite --framework tflite --size 4
 # yolov4 video - with file output
 python detectvideo_output.py --weights ./data/yolov4.weights --framework tf --size 608 --video ./path_to_video_file
 
-# yolov4 counter - need to change the line position within the file.
+# yolov4 counter ROI defined on executing
 python detectvideo_counter.py --weights ./data/yolov4.weights --framework tf --size 608 --video ./path_to_video_file
+
+# yolov4 fast counter using tiny weights
+python detectvideo_counter.py --weights ./checkpoints/yolov4-tiny-416  --video ./data/road3.mp4 --tiny
 ```
 
 #### Outputs
@@ -90,6 +93,6 @@ python convert_trt.py --weights ./checkpoints/yolov4.tf --quantize_mode float16 
   They are amazing!
   
   * [darknet](https://github.com/AlexeyAB/darknet)
-  * [hunglc007-tfyolov4lite]https://github.com/hunglc007/tensorflow-yolov4-tflite
+  * [tfyolov4lite]https://github.com/hunglc007/tensorflow-yolov4-tflite
   * [TheAIGuy](https://github.com/theAIGuysCode)
   * [Object counter in Yolo](https://github.com/tugot17/YOLO-Object-Counting-API)
