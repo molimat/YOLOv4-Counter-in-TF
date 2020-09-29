@@ -123,7 +123,7 @@ class KalmanBoxTracker(object):
     """
     return convert_x_to_bbox(self.kf.x)
 
-def associate_detections_to_trackers(detections,trackers,iou_threshold = 0.15):
+def associate_detections_to_trackers(detections,trackers,iou_threshold = 0.22):
   """
   Assigns detections to tracked object (both represented as bounding boxes)
 

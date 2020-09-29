@@ -16,7 +16,7 @@ import numpy as np
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
 
-flags.DEFINE_string('framework', 'tf', '(tf, tflite, trt')
+flags.DEFINE_string('framework', 'tf', '(tf, tflite')
 flags.DEFINE_string('weights', './checkpoints/yolov4-416',
                     'path to weights file')
 flags.DEFINE_integer('size', 416, 'resize images to')
@@ -79,6 +79,9 @@ def main(_argv):
 
     while True:
         return_value, frame = vid.read()
+        if not  return_value: #verify if the last frame was empty
+                    print("end of the video file...")
+                    break
         if return_value:
             #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             image = Image.fromarray(frame)
@@ -94,10 +97,10 @@ def main(_argv):
             interpreter.set_tensor(input_details[0]['index'], image_data)
             interpreter.invoke()
             pred = [interpreter.get_tensor(output_details[i]['index']) for i in range(len(output_details))]
-            if FLAGS.model == 'yolov4' and FLAGS.tiny == True:
-                boxes, pred_conf = filter_boxes(pred[1], pred[0], score_threshold=0.25)
-            else:
-                boxes, pred_conf = filter_boxes(pred[0], pred[1], score_threshold=0.25)
+            # if FLAGS.model == 'yolov4' and FLAGS.tiny == True:
+            #     boxes, pred_conf = filter_boxes(pred[1], pred[0], score_threshold=0.25)
+            # else:
+            #     boxes, pred_conf = filter_boxes(pred[0], pred[1], score_threshold=0.25)
         else:
             batch_data = tf.constant(image_data)
             pred_bbox = infer(batch_data)
