@@ -4,8 +4,8 @@
 YOLOv4 implementation for a counter program, using tensorflow.
 In future trying to make it faster and lighter to deploy to low hardware systems
 
-
-COCO data set, 80 Classes yolov4.weights file: https://drive.google.com/open?id=1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT
+Video Analysis for this network, in comparison to human volunteers: https://drive.google.com/drive/u/0/folders/1Es_wIs_X8q_UhNZoQSm_tlonMcuPr2vJ
+COCO data set, 80 Classes yolov4 weights file (to be add to checkpoints folder): https://drive.google.com/drive/u/0/folders/1ZDs2xCzyOjOckmNZNUGLE20PumyrOkNr
 
 
 ### Disclaimer
