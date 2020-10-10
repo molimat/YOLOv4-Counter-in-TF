@@ -4,8 +4,9 @@
 YOLOv4 implementation for a counter program, using tensorflow.
 In future trying to make it faster and lighter to deploy to low hardware systems
 
+Video Analysis for this network, in comparison to human volunteers: https://drive.google.com/drive/u/0/folders/1Es_wIs_X8q_UhNZoQSm_tlonMcuPr2vJ
 
-COCO data set, 80 Classes yolov4.weights file: https://drive.google.com/open?id=1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT
+COCO data set, 80 Classes yolov4 weights file (to be add to checkpoints folder): https://drive.google.com/drive/u/0/folders/1ZDs2xCzyOjOckmNZNUGLE20PumyrOkNr
 
 
 ### Disclaimer
@@ -93,6 +94,6 @@ python convert_trt.py --weights ./checkpoints/yolov4.tf --quantize_mode float16 
   They are amazing!
   
   * [darknet](https://github.com/AlexeyAB/darknet)
-  * [tfyolov4lite]https://github.com/hunglc007/tensorflow-yolov4-tflite
+  * [tfyolov4lite](https://github.com/hunglc007/tensorflow-yolov4-tflite)
   * [TheAIGuy](https://github.com/theAIGuysCode)
   * [Object counter in Yolo](https://github.com/tugot17/YOLO-Object-Counting-API)
