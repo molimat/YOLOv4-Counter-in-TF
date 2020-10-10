@@ -3,7 +3,7 @@ core/__pycache__/
 .vscode/settings.json
 road.mp4
 *.avi
-checkpoints/*
+checkpoints/yolo*
 data/*.mp4
 data/road.mp4
 data/yolov4*
