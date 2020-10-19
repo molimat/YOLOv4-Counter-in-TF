@@ -35,9 +35,13 @@ def get_ROI_line(img):
     # # load the image, clone it, and setup the mouse callback function
     global refPt, cropping, image, clone
     image = np.array(img)
+    image = cv2.putText(image, "Press C to confirm ROI and continue.", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA )
+    image = cv2.putText(image, "Press R to reset.", (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA )
     clone = image.copy()
     cv2.namedWindow("image")
     cv2.setMouseCallback("image", click_and_draw)
+    
+
     # keep looping until the 'q' key is pressed
     while True:
         # display the image and wait for a keypress
@@ -48,6 +52,7 @@ def get_ROI_line(img):
             image = clone.copy()
         # if the 'c' key is pressed, break from the loop
         elif key == ord("c"):
+            cv2.destroyAllWindows()
             break
     # if there are two reference points, then crop the region of interest
     # from teh image and display it
